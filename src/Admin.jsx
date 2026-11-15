@@ -5,8 +5,9 @@ import {db,useVal,list} from './firebase.js';
 import {useApp} from './store.jsx';
 import {Icon} from './ui.jsx';
 import {money,pct,imgs,cols,COLORS,waLink,telLink} from './helpers.js';
+import {PAGES} from './pages.js';
 
-const TABS=['Overview','Products','Categories','Orders','Customers','Settings'];
+const TABS=['Overview','Products','Categories','Orders','Customers','Pages','Settings'];
 const STATUS=['Pending','Confirmed','Shipped','Delivered','Cancelled'];
 
 export default function Admin(){
@@ -14,7 +15,7 @@ export default function Admin(){
   const[tab,setTab]=useState('Overview');
   if(user===undefined)return <p className="c">Loading…</p>;
   if(!isAdmin)return <p className="c">Admin only. <Link to="/login" state={{from:'/admin'}}>Log in as admin</Link></p>;
-  const T={Overview,Products,Categories,OrdersTab,Customers,Settings}[tab==='Orders'?'OrdersTab':tab];
+  const T={Overview,Products,Categories,Orders:OrdersTab,Customers,Pages:PagesTab,Settings}[tab];
   return <div><h2>Admin dashboard</h2>
     <div className="chips">{TABS.map(t=><button key={t} className={tab===t?'on':''} onClick={()=>setTab(t)}>{t}</button>)}</div>
     <T/></div>;
@@ -187,4 +188,44 @@ function SettingsForm({init}){
     {FIELDS.map(([k,l,m])=><label key={k}>{l}<input inputMode={m} value={f[k]} onChange={e=>setF({...f,[k]:e.target.value})}/></label>)}
     <p><small>Use full numbers like 01XXXXXXXXX. Customers see the contact and WhatsApp numbers on product pages, at checkout and in the footer.</small></p>
     <button>Save settings</button></form>;
+}
+
+// Admin > Pages: edit the text of About us, How to order, Privacy policy, etc.
+function PagesTab(){
+  const[slug,setSlug]=useState(PAGES[0].slug);
+  return <>
+    <div className="chips" role="group" aria-label="Choose a page to edit">{PAGES.map(p=>
+      <button key={p.slug} className={slug===p.slug?'on':''} aria-pressed={slug===p.slug} onClick={()=>setSlug(p.slug)}>{p.title}</button>)}</div>
+    <PageEditor key={slug} slug={slug}/>
+  </>;
+}
+function PageEditor({slug}){
+  const D=useVal('pages/'+slug);
+  return D?<PageForm slug={slug} saved={D.content}/>:<p className="c">Loading…</p>;
+}
+function PageForm({slug,saved}){
+  const{toast}=useApp(),meta=PAGES.find(p=>p.slug===slug);
+  const[text,setText]=useState(saved||meta.text),[busy,setBusy]=useState(false);
+  const save=async e=>{
+    e.preventDefault();setBusy(true);
+    try{
+      await set(ref(db,'pages/'+slug),{content:text.trim(),updatedAt:Date.now()});
+      toast('Saved. Customers can see it now.');
+    }catch(x){toast(x.message)}
+    setBusy(false);
+  };
+  const reset=async()=>{
+    if(!confirm('Go back to the original text for this page? Your changes will be lost.'))return;
+    try{await remove(ref(db,'pages/'+slug));setText(meta.text);toast('Original text restored')}
+    catch(x){toast(x.message)}
+  };
+  return <form className="box" onSubmit={save}>
+    <h3>{meta.title}</h3>
+    {!saved&&<p className="save">This page is showing our ready-made text. Change it to your own and press Save.</p>}
+    <textarea className="pgtext" aria-label={meta.title+' text'} rows={16} value={text} onChange={e=>setText(e.target.value)}/>
+    <p><small>Press Enter for a new paragraph. Start a line with # for a heading, with - for a bullet point, or with 1. 2. 3. for steps.</small></p>
+    <button disabled={busy}>{busy?'Saving…':'Save page'}</button>
+    <Link className="btn gray full" to={'/page/'+slug}>View page</Link>
+    {saved&&<button type="button" className="gray full" onClick={reset}>Use original text</button>}
+  </form>;
 }

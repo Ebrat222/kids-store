@@ -4,7 +4,7 @@ import {ref,push,update,query,orderByChild,equalTo,onValue} from 'firebase/datab
 import {db,useVal,list} from './firebase.js';
 import {useApp,useLiveCart} from './store.jsx';
 import {Icon,ProductCard,Help,CopyNumber} from './ui.jsx';
-import {money,pct,feeFor,deliveryText,waLink,PHONE_RE} from './helpers.js';
+import {money,pct,feeFor,deliveryText,PHONE_RE} from './helpers.js';
 
 export function Home(){
   const{wish}=useApp();
@@ -169,7 +169,6 @@ const FLOW=['Pending','Confirmed','Shipped','Delivered'];
 
 export function Orders(){
   const{user}=useApp();
-  const S=useVal('settings')||{};
   const[o,setO]=useState(null);
   useEffect(()=>{
     if(!user)return;
@@ -192,7 +191,6 @@ export function Orders(){
           <div className="lt"><b>{i.name}</b><small>{i.color?i.color+' × ':'× '}{i.qty}</small></div>
           <b>{money(i.price*i.qty)}</b></div>)}
         <div className="sum tot"><span>Total</span><b>{money(x.total)}</b></div>
-        {S.whatsapp&&<a className="btn wa sm" href={waLink(S.whatsapp,'Hi! I need help with order #'+code)} target="_blank" rel="noreferrer"><Icon n="chat" size={16}/>Ask about this order</a>}
       </div>;
     })}</div>
   </div>;

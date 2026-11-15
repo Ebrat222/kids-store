@@ -9,6 +9,7 @@ import {Home,Cart,Checkout,Orders} from './Shop.jsx';
 import {Login,Profile} from './Account.jsx';
 import Product from './Product.jsx';
 import Admin from './Admin.jsx';
+import {InfoPage,FooterLinks} from './Pages.jsx';
 
 function Layout(){
   const{cart,user,isAdmin,msg,toast}=useApp();
@@ -36,6 +37,7 @@ function Layout(){
     {S.whatsapp&&!loc.pathname.startsWith('/admin')&&
       <a className="wafab" href={waLink(S.whatsapp,'Hi! I have a question.')} target="_blank" rel="noreferrer" aria-label="Chat with us on WhatsApp"><Icon n="chat" size={26}/></a>}
     <footer>
+      <FooterLinks/>
       <span>Copyright © {new Date().getFullYear()} Kids Store</span>
       <span className="sep" aria-hidden="true">|</span>
       <span>Developed by <a href="https://ebrat222.github.io/portfolio/" target="_blank" rel="noreferrer">Ebrat Hossen</a></span>
@@ -53,6 +55,7 @@ export default function App(){
     <Route path="orders" element={<Orders/>}/>
     <Route path="profile" element={<Profile/>}/>
     <Route path="login" element={<Login/>}/>
+    <Route path="page/:slug" element={<InfoPage/>}/>
     <Route path="admin" element={<Admin/>}/>
     <Route path="*" element={<div className="c"><p>We couldn't find that page.</p><Link className="btn" to="/">Back to shop</Link></div>}/>
   </Route></Routes></Provider>;
