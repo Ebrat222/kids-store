@@ -64,20 +64,24 @@ export function Cart(){
   return <div className="box"><h2>Your cart</h2>
     {more>0&&ok.length>0&&<div className="ship"><span>Add <b>{money(more)}</b> more for free delivery</span>
       <div className="bar2" role="progressbar" aria-valuemin="0" aria-valuemax={thr} aria-valuenow={sub}><i style={{width:Math.min(100,sub/thr*100)+'%'}}/></div></div>}
-    {items.map(i=><div className="line" key={i.key}>
+    {items.map(i=><div className="line cl" key={i.key}>
       <Link to={'/product/'+i.id} className="thumb">{i.image?<img src={i.image} alt=""/>:'🧸'}</Link>
       <div className="lt">
         <Link to={'/product/'+i.id}><b>{i.name}</b></Link>
         <small>Color: {i.color} · {money(i.price)}</small>
-        {i.ok?<div className="qty sm">
-          <button type="button" aria-label="Fewer" onClick={()=>setQty(i.key,i.qty-1)}><Icon n="minus" size={14}/></button>
-          <span>{i.qty}</span>
-          <button type="button" aria-label="More" disabled={i.qty>=i.stock} onClick={()=>setQty(i.key,i.qty+1)}><Icon n="plus" size={14}/></button>
-          {i.qty>=i.stock&&<small className="warn">Max available</small>}
-        </div>:<small className="warn">Sold out. Please remove this item.</small>}
+        {!i.ok&&<small className="warn">Sold out. Please remove this item.</small>}
+        {i.ok&&i.qty>=i.stock&&<small className="warn">Max available</small>}
       </div>
-      <div className="lr">{i.ok&&<b>{money(i.price*i.qty)}</b>}
-        <button type="button" className="ghost" aria-label={'Remove '+i.name} onClick={()=>remove(i.key)}><Icon n="trash" size={18}/></button></div>
+      {i.ok&&<b className="lp">{money(i.price*i.qty)}</b>}
+      {/* big, well-spaced buttons on their own row so they are easy to tap */}
+      <div className="qrow">
+        {i.ok&&<div className="qty sm">
+          <button type="button" aria-label={'Decrease quantity of '+i.name} disabled={i.qty<=1} onClick={()=>setQty(i.key,i.qty-1)}><Icon n="minus" size={22}/></button>
+          <span aria-live="polite">{i.qty}</span>
+          <button type="button" aria-label={'Increase quantity of '+i.name} disabled={i.qty>=i.stock} onClick={()=>setQty(i.key,i.qty+1)}><Icon n="plus" size={22}/></button>
+        </div>}
+        <button type="button" className="del" aria-label={'Remove '+i.name} onClick={()=>remove(i.key)}><Icon n="trash" size={22}/></button>
+      </div>
     </div>)}
     <div className="sum"><span>Subtotal</span><b>{money(sub)}</b></div>
     <div className="sum"><span>Delivery</span><b>{fee?money(fee):'Free'}</b></div>
@@ -176,9 +180,9 @@ export function Orders(){
   if(!o)return <p className="c">Loading…</p>;
   return <div className="box"><h2>My orders</h2>
     {!o.length&&<div className="c"><p>No orders yet.</p><Link className="btn" to="/">Start shopping</Link></div>}
-    {o.map(x=>{
+    <div className="olist">{o.map(x=>{
       const idx=FLOW.indexOf(x.status),code=x.id.slice(-6).toUpperCase();
-      return <div className="ord" key={x.id}>
+      return <div className="ord ordc" key={x.id}>
         <div className="oh"><b>Order #{code}</b><span className={'st '+x.status}>{x.status}</span></div>
         <small>{new Date(x.createdAt).toLocaleString()} · {String(x.method).toUpperCase()}</small>
         {x.status==='Cancelled'?<p className="warn">This order was cancelled.</p>
@@ -190,5 +194,6 @@ export function Orders(){
         <div className="sum tot"><span>Total</span><b>{money(x.total)}</b></div>
         {S.whatsapp&&<a className="btn wa sm" href={waLink(S.whatsapp,'Hi! I need help with order #'+code)} target="_blank" rel="noreferrer"><Icon n="chat" size={16}/>Ask about this order</a>}
       </div>;
-    })}</div>;
+    })}</div>
+  </div>;
 }

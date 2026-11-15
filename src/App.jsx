@@ -4,7 +4,7 @@ import {signOut} from 'firebase/auth';
 import {auth,useVal} from './firebase.js';
 import {Provider,useApp} from './store.jsx';
 import {Icon} from './ui.jsx';
-import {waLink,telLink} from './helpers.js';
+import {waLink} from './helpers.js';
 import {Home,Cart,Checkout,Orders} from './Shop.jsx';
 import {Login,Profile} from './Account.jsx';
 import Product from './Product.jsx';
@@ -36,11 +36,9 @@ function Layout(){
     {S.whatsapp&&!loc.pathname.startsWith('/admin')&&
       <a className="wafab" href={waLink(S.whatsapp,'Hi! I have a question.')} target="_blank" rel="noreferrer" aria-label="Chat with us on WhatsApp"><Icon n="chat" size={26}/></a>}
     <footer>
-      <b>Kids Store</b>
-      {(S.phone||S.whatsapp)&&<div className="fc">
-        {S.phone&&<a href={telLink(S.phone)}>Call {S.phone}</a>}
-        {S.whatsapp&&<a href={waLink(S.whatsapp)} target="_blank" rel="noreferrer">WhatsApp</a>}</div>}
-      <small>© Kids Store</small>
+      <span>Copyright © {new Date().getFullYear()} Kids Store</span>
+      <span className="sep" aria-hidden="true">|</span>
+      <span>Developed by <a href="https://ebrat222.github.io/portfolio/" target="_blank" rel="noreferrer">Ebrat Hossen</a></span>
     </footer>
     <div className={'toast'+(msg?' show':'')} role="status" aria-live="polite">{msg}</div>
   </>;

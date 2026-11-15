@@ -21,8 +21,9 @@ nav{display:flex;gap:2px;align-items:center}
 @media(min-width:640px){.lb{display:inline}.ib{padding:8px 12px}.ib .badge{position:static}}
 
 main{max-width:1100px;margin:auto;padding:14px 14px 96px;min-height:70vh}
-footer{text-align:center;padding:18px 14px 28px;display:grid;gap:6px;opacity:.85}
-footer small{opacity:.7}.fc{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+footer{display:flex;flex-wrap:wrap;justify-content:center;gap:2px 10px;text-align:center;padding:18px 14px 28px;font-size:.9rem}
+footer a{color:var(--ink);font-weight:800;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:4px 2px}
+@media(max-width:520px){footer .sep{display:none}} /* on phones the two parts stack, so no divider */
 
 .hero{background:var(--sun);border-radius:18px;padding:26px 18px;margin-bottom:12px}
 .hero h1{margin:0;font-size:clamp(1.9rem,7vw,3.2rem);line-height:1.05;font-weight:800}
@@ -64,7 +65,9 @@ button,.btn{background:var(--blue);color:#fff;border:0;border-radius:10px;paddin
 button:disabled{opacity:.5;cursor:default}
 .gray{background:#8a94a8}.red{background:var(--red);padding:6px 10px}.sun{background:var(--sun);color:var(--ink)}
 .full{width:100%;margin-top:10px}.btn.sm{padding:6px 10px;font-size:.9rem}
-.ghost{background:transparent;color:var(--redtx);padding:6px}
+.del{margin-left:auto;width:46px;height:46px;padding:0;border-radius:12px;background:#fdecec;color:var(--redtx)}
+.del:hover{background:#fbd9da}
+@media(prefers-reduced-motion:no-preference){.qty.sm button,.del{transition:transform .08s,background .15s}.qty.sm button:active:not(:disabled),.del:active{transform:scale(.93)}}
 .call{background:var(--ink)}.wa{background:var(--wa)}
 .crumb{display:inline-flex;align-items:center;gap:4px;font-weight:700;text-decoration:none;margin-bottom:8px}
 
@@ -87,7 +90,10 @@ button:disabled{opacity:.5;cursor:default}
 .qty{display:inline-flex;align-items:center;gap:12px;background:#fff;border:2px solid var(--edge);border-radius:12px;padding:2px}
 .qty button{padding:8px;background:#e8f1ff;color:var(--ink)}
 .qty span{min-width:24px;text-align:center;font-weight:800}
-.qty.sm{padding:0;gap:8px;margin-top:4px}.qty.sm button{padding:5px}
+.qty.sm{padding:3px;gap:4px;margin:0}
+.qty.sm button{width:46px;height:46px;padding:0;border-radius:10px}
+.qty.sm button:hover:not(:disabled){background:#d5e6ff}
+.qty.sm span{min-width:38px;font-size:1.2rem}
 .acts{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
 .acts>button:not(.icon){flex:1 1 130px}
 .acts .icon{background:#fff;color:var(--ink);border:2px solid var(--edge);padding:10px}
@@ -113,13 +119,22 @@ button:disabled{opacity:.5;cursor:default}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .line.sm .thumb{width:48px;height:48px}
 .lt{flex:1;min-width:0;display:grid;gap:1px}.lt a{color:var(--ink);text-decoration:none}.lt small{opacity:.75}
-.lr{display:grid;justify-items:end;gap:2px}
+.line.cl{flex-wrap:wrap;padding:14px 0}
+.cl .lp{white-space:nowrap}
+.qrow{flex:1 0 100%;display:flex;align-items:center;gap:10px}
+@media(min-width:420px){.qrow{padding-left:74px}} /* line the buttons up with the product name */
 .sum{display:flex;justify-content:space-between;padding:4px 0}
 .sum.tot{font-family:'Baloo 2',sans-serif;font-size:1.25rem;border-top:2px solid var(--line);margin-top:4px;padding-top:8px}
 .ship{background:#fff4cc;border-radius:12px;padding:10px;margin-bottom:6px}
 .bar2{height:8px;background:#fff;border-radius:8px;margin-top:6px;overflow:hidden}.bar2 i{display:block;height:100%;background:var(--blue);border-radius:8px}
 
 .ord{border-bottom:1px solid var(--line);padding:12px 0}
+.olist{display:grid;gap:18px;margin-top:8px}
+.ord.ordc{background:var(--sky);border:2px solid var(--edge);border-radius:16px;padding:12px;box-shadow:0 6px 18px rgba(31,42,68,.13)}
+.ordc .oh{margin-bottom:2px}
+.ordc .line.sm{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin:8px 0;box-shadow:0 1px 3px rgba(31,42,68,.08)}
+.ordc .sum.tot{margin-top:8px}
+.ordc .btn.sm{margin-top:12px;padding:10px 14px}
 .oh{display:flex;justify-content:space-between;align-items:center}
 .oact{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:6px}
 .ord select{width:auto;margin:0}
