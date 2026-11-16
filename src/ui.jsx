@@ -12,7 +12,6 @@ const I={
   dash:<><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></>,
   phone:<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>,
   chat:<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>,
-  heart:<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>,
   copy:<><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></>,
   trash:<><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></>,
   back:<><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></>,
@@ -36,14 +35,12 @@ export function Price({p,big}){
 }
 
 export function ProductCard({p}){
-  const{add,wish,toggleWish}=useApp(),nav=useNavigate();
-  const to='/product/'+p.id,im=imgs(p)[0],has=wish.includes(p.id);
+  const{add}=useApp(),nav=useNavigate();
+  const to='/product/'+p.id,im=imgs(p)[0];
   const out=!(p.stock>0),multi=cols(p).length>1;
   return <div className="card">
     <div className="ph">
       <Link to={to} tabIndex={-1} aria-hidden="true">{im?<img src={im} alt="" loading="lazy"/>:<div className="noimg">🧸</div>}</Link>
-      <button type="button" className="fav" aria-pressed={has} aria-label={has?'Remove from saved':'Save for later'} onClick={()=>toggleWish(p.id)}>
-        <Icon n="heart" size={18} fill={has?'currentColor':'none'}/></button>
       {out?<span className="tag out">Sold out</span>:p.stock<=5&&<span className="tag">Only {p.stock} left</span>}
     </div>
     <Link to={to} className="meta"><h3>{p.name}</h3><p className="d">{p.desc||'\u00a0'}</p></Link>

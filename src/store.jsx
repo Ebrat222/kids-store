@@ -11,13 +11,12 @@ export function Provider({children}){
   const[user,setUser]=useState(undefined);
   // cart line = one product in one color; "key" is id|color
   const[cart,setCart]=useState(()=>load('cart').map(i=>({...i,color:i.color||'White',key:i.key||i.id+'|'+(i.color||'White')})));
-  const[wish,setWish]=useState(()=>load('wish'));
   const[msg,setMsg]=useState('');
   const timer=useRef();
 
   useEffect(()=>onAuthStateChanged(auth,setUser),[]);
   useEffect(()=>{localStorage.setItem('cart',JSON.stringify(cart))},[cart]);
-  useEffect(()=>{localStorage.setItem('wish',JSON.stringify(wish))},[wish]);
+  useEffect(()=>{try{localStorage.removeItem('wish')}catch{}},[]); // clean up old saved-items data
 
   const toast=useCallback(m=>{
     setMsg(m);clearTimeout(timer.current);
@@ -38,10 +37,9 @@ export function Provider({children}){
   };
   const setQty=(key,q)=>setCart(c=>c.map(i=>i.key===key?{...i,qty:Math.min(q,i.stock||99)}:i).filter(i=>i.qty>0));
   const remove=key=>setCart(c=>c.filter(i=>i.key!==key));
-  const toggleWish=id=>setWish(w=>w.includes(id)?w.filter(x=>x!==id):[...w,id]);
 
   return <Ctx.Provider value={{user,isAdmin:user?.email===ADMIN_EMAIL,cart,add,setQty,remove,clear:()=>setCart([]),
-    wish,toggleWish,toast,msg}}>{children}</Ctx.Provider>;
+    toast,msg}}>{children}</Ctx.Provider>;
 }
 
 // Cart lines checked against the live product list:

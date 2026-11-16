@@ -7,9 +7,8 @@ import {Icon,ProductCard,Help,CopyNumber} from './ui.jsx';
 import {money,pct,feeFor,deliveryText,PHONE_RE} from './helpers.js';
 
 export function Home(){
-  const{wish}=useApp();
   const P=useVal('products'),C=useVal('categories'),S=useVal('settings');
-  const[cat,setCat]=useState(''),[q,setQ]=useState(''),[sort,setSort]=useState('new'),[saved,setSaved]=useState(false);
+  const[cat,setCat]=useState(''),[q,setQ]=useState(''),[sort,setSort]=useState('new');
 
   const by={
     new:(a,b)=>(b.createdAt||0)-(a.createdAt||0)||b.id.localeCompare(a.id),
@@ -19,7 +18,7 @@ export function Home(){
   };
   const needle=q.trim().toLowerCase();
   const items=list(P)
-    .filter(p=>(!cat||p.category===cat)&&(!saved||wish.includes(p.id))&&
+    .filter(p=>(!cat||p.category===cat)&&
       ((p.name||'')+' '+(p.desc||'')+' '+(p.category||'')).toLowerCase().includes(needle))
     .sort(by[sort]).sort((a,b)=>(b.stock>0)-(a.stock>0)); // sold-out items go last
 
@@ -40,14 +39,12 @@ export function Home(){
     <div className="chips">
       <button className={!cat?'on':''} onClick={()=>setCat('')}>All</button>
       {list(C).map(c=><button key={c.id} className={cat===c.name?'on':''} onClick={()=>setCat(c.name)}>{c.name}</button>)}
-      <button className={saved?'on':''} aria-pressed={saved} onClick={()=>setSaved(!saved)}><Icon n="heart" size={14} fill={saved?'currentColor':'none'}/> Saved ({wish.length})</button>
     </div>
 
     {!P?<div className="grid">{[0,1,2,3,4,5].map(k=><div className="card sk" key={k}/>)}</div>
       :<div className="grid">{items.map(p=><ProductCard key={p.id} p={p}/>)}</div>}
     {P&&!items.length&&<div className="c">
-      {saved&&!wish.length?<p>Tap the heart on a product to save it here.</p>
-        :q||cat||saved?<><p>No products match your search.</p><button onClick={()=>{setQ('');setCat('');setSaved(false)}}>Clear filters</button></>
+      {q||cat?<><p>No products match your search.</p><button onClick={()=>{setQ('');setCat('')}}>Clear filters</button></>
         :<p>No products yet. Please check back soon.</p>}
     </div>}
   </>;

@@ -7,7 +7,7 @@ import {money,pct,imgs,cols,COLORS,deliveryText,copyText} from './helpers.js';
 
 export default function Product(){
   const{id}=useParams(),nav=useNavigate();
-  const{add,wish,toggleWish,toast}=useApp();
+  const{add,toast}=useApp();
   const P=useVal('products'),S=useVal('settings');
   const[pic,setPic]=useState(0),[color,setColor]=useState(null),[qty,setQty]=useState(1);
   const p=P&&P[id]?{id,...P[id]}:null;
@@ -22,7 +22,7 @@ export default function Product(){
   if(!p)return <div className="c"><p>We couldn't find this product. It may have been removed.</p><Link className="btn" to="/">Back to shop</Link></div>;
 
   const im=imgs(p),cl=cols(p),cur=cl.includes(color)?color:cl[0];
-  const d=pct(p),left=+p.stock||0,out=left<=0,has=wish.includes(p.id);
+  const d=pct(p),left=+p.stock||0,out=left<=0;
   const n=Math.min(Math.max(1,qty),Math.max(left,1));
   const code=p.id.slice(-6).toUpperCase();
   const rel=list(P).filter(x=>x.category===p.category&&x.id!==p.id&&x.stock>0).slice(0,4);
@@ -64,8 +64,6 @@ export default function Product(){
         <div className="acts">
           <button disabled={out} onClick={()=>add(p,cur,n)}><Icon n="cart" size={18}/>{out?'Sold out':'Add to cart'}</button>
           {!out&&<button className="sun" onClick={()=>{if(add(p,cur,n))nav('/checkout')}}>Buy now</button>}
-          <button type="button" className={'icon'+(has?' on':'')} aria-pressed={has} aria-label={has?'Remove from saved':'Save for later'} onClick={()=>toggleWish(p.id)}>
-            <Icon n="heart" fill={has?'currentColor':'none'}/></button>
           <button type="button" className="icon" aria-label="Share this product" onClick={share}><Icon n="share"/></button>
         </div>
 

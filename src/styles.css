@@ -47,8 +47,6 @@ input[type=checkbox],input[type=radio]{width:auto;margin:0}
 .ph img,.noimg{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;display:block}
 .noimg{display:grid;place-items:center;font-size:3rem;background:#e8f1ff}
 .noimg.sm{width:48px;aspect-ratio:1;font-size:1.5rem;font-style:normal;flex:none}
-.fav{position:absolute;top:6px;right:6px;width:34px;height:34px;padding:0;display:grid;place-items:center;border-radius:50%;background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(31,42,68,.25)}
-.fav[aria-pressed=true]{color:var(--red)}
 .tag{position:absolute;left:6px;bottom:6px;background:var(--sun);color:var(--ink);font-size:.75rem;font-weight:700;border-radius:8px;padding:2px 8px}
 .tag.out{background:var(--ink);color:#fff}
 .meta{color:inherit;text-decoration:none;flex:1;display:block}
@@ -97,7 +95,6 @@ button:disabled{opacity:.5;cursor:default}
 .acts{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
 .acts>button:not(.icon){flex:1 1 130px}
 .acts .icon{background:#fff;color:var(--ink);border:2px solid var(--edge);padding:10px}
-.acts .icon.on{color:var(--red)}
 .perk-list{display:grid;gap:8px;font-weight:700}.perk-list div{display:flex;gap:8px;align-items:center}.perk-list svg{color:var(--blue);flex:none}
 .box.wide{max-width:none}
 .desc{white-space:pre-wrap;line-height:1.5;margin:0 0 10px}
